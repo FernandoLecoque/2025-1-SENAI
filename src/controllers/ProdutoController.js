@@ -1,4 +1,4 @@
-import { criandoProduto } from "../models/ProdutoModel.js";
+import { criandoProduto, mostrarProdutos } from "../models/ProdutoModel.js";
 
 //CRUD Produto
 export const createProduto = async (req,res) => {
@@ -14,15 +14,35 @@ try {
 }
 }
 
-const readProduto = async (req,res) => {
+export const readProduto = async (req,res) => {
+    console.log('ProdutoController :: readProduto');
+    const nome = req.body
+
+    try {
+        const [status, resposta] = await mostrarProdutos();
+        res.status(status).json(resposta);
+    } catch (error) {
+        console.log(error)
+        res.status (500).json({messagem: "erro ao mostrar produto"})
+    }
 
 }
 
-const updateProduto = async (req,res) =>{
-    const id_produto = req.params.id;
+export const updateProduto = async (req,res) =>{
+    console.log ('ProdutoController :: updateProduto')
+    const id_produto = req.params.id_produto;
     const nome = req.body.nome;
+
+    try{
+        const [status,resposta] = await atualizandoProduto(id_produto,nome)
+        res.status(status).json(resposta)
+    } catch (error){
+        //console.log(error)
+        res.status(500).json({mensagem: "erro ao atualizar produto"})
+    }
 }
 
-const deleteProduto = async (req,res) => {
-    const id_produto = req.params.id;
+export const deleteProduto = async (req,res) => {
+    const id_produto = req.params,id;
+    console.log() 
 }

@@ -29,7 +29,7 @@ export const criandoProduto = async (nomeProduto) =>{
 
 }
 //mostrando produtos da Tabela produto
-const mostrarProdutos = async () =>{
+export const mostrarProdutos = async () =>{
     console.log('ProdutoModel :: mostrarProdutos');
     
     //SQL para realizar consulta
@@ -38,7 +38,7 @@ const mostrarProdutos = async () =>{
     try{
         //pegando primeiro array de resposta
         const [resposta] = await conexao.query(sql);
-        console.log(resposta)
+        return[200,resposta]
     } catch (error){
         console.error(error);
     }
@@ -56,9 +56,19 @@ const atualizandoProduto = async(id_produto,nomeProduto)=>{
 
     try {
         const [resposta] = await conexao.query(sql, params);
-        console.log(resposta);
+        //console.log(resposta);
+        if (resposta.affectedRows<1){
+            return [404,{mensagem:'Produto não encontrado'}]
+        }else {
+            return[200,{mensagem:'Produto atualizado com sucesso'}]
+        }
     } catch (error) {
-        console.error(error);
+        //console.error(error);
+        return[500,{
+            mensagem:'Erro servidor',
+            code:error.code,
+            sql:error.sqlMessage
+        }]
     }
 }
 
